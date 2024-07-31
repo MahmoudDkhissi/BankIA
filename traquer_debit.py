@@ -5,7 +5,7 @@ from datetime import datetime
 # Connexion à MongoDB
 client = pymongo.MongoClient("mongodb+srv://intraday:intraday@dev.vqjrrab.mongodb.net/")  # Remplacez par votre URI MongoDB
 db = client['DEV']  # Remplacez par le nom de votre base de données
-collection = db['TEST']  # Remplacez par le nom de votre collection
+collection = db['MOUV_COPIE']  # Remplacez par le nom de votre collection
 dct_collection = db['DCT']  # Nouvelle collection pour traquer les opérations débit/crédit
 
 # Récupérer uniquement les documents non suivis (tracked: false ou tracked: null)
@@ -42,7 +42,7 @@ else:
                     'SIGN': 'D',
                     'DISPONIBLE': amount,
                     'OLDDISPONIBLE': old_amount,
-                    'AMOUNT': row['AMOUNT']
+                    'AMOUNT': row['AMAOUNT']
                 }
             # Vérifier si le solde précédent était négatif et le nouveau solde est ≥ 0 (transition à C)
             elif old_amount < 0 and amount >= 0:
@@ -53,7 +53,7 @@ else:
                     'SIGN': 'C',
                     'DISPONIBLE': amount,
                     'OLDDISPONIBLE': old_amount,
-                    'AMOUNT': row['AMOUNT']
+                    'AMOUNT': row['AMAOUNT']
                 }
 
     # Insérer ou mettre à jour les dernières opérations transitoires dans la collection DCT
