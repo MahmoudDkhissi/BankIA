@@ -4,9 +4,9 @@ from datetime import datetime
 
 # Connexion à MongoDB
 client = pymongo.MongoClient("mongodb+srv://intraday:intraday@dev.vqjrrab.mongodb.net/")  # Remplacez par votre URI MongoDB
-db = client['DEV']  # Remplacez par le nom de votre base de données
-collection = db['MOUV_COPIE']  # Remplacez par le nom de votre collection
-dct_collection = db['DCT']  # Nouvelle collection pour traquer les opérations débit/crédit
+db = client['DEV']  
+collection = db['MOUV_COPIE']  
+dct_collection = db['DCT']  # Collection pour traquer les opérations débit/crédit
 
 # Récupérer uniquement les documents non suivis (tracked: false ou tracked: null)
 documents = list(collection.find({'$or': [{'tracked': False}, {'tracked': {'$exists': False}}, {'tracked': None}]}))
