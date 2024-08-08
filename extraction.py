@@ -1,10 +1,11 @@
 import pymongo
+import numpy as np
 import pandas as pd
 
 # Connexion à MongoDB
 client = pymongo.MongoClient("mongodb+srv://intraday:intraday@dev.vqjrrab.mongodb.net/")
-db = client['DEV']
-collection = db['MOUV_COPIE']
+db = client['RCT']
+collection = db['MOUV']
 
 # Récupérer toutes les transactions
 documents = list(collection.find())
@@ -18,15 +19,22 @@ else:
 
     # Initialiser une liste pour stocker les données à exploiter dans le modèle ML
     ml_data = []
+    compteur = 0
 
     # Parcourir chaque transaction et identifier les transactions débiteuses
     for account, group in df.groupby('ACCOUNT'):
+        if compteur > 7000 :
+            break
+        
+        group.reset_index(drop=True, inplace=True)
+
         for index, row in group.iterrows():
     
 
-            if (row['DISPONIBLE'] < 0 and row['OLDDISPONIBLE'] >= 0) :  # Transaction débiteuse
+            if (np.sign(row['DISPONIBLE']) == np.sign(row['OLDDISPONIBLE'])) :  # Transaction débiteuse
                 # Récupérer les transactions précédentes (pas de restriction à 5)
                 start_index = max(0, index-5)
+                #print(group)
 
                 previous_transactions = group.iloc[start_index:index]
 
@@ -49,8 +57,10 @@ else:
                     'max_amount': max_amount,
                     'num_debits': num_debits,
                     'num_credits': num_credits,
-                    'target': 'debit'  # Label pour ML
+                    'target': 'credit'  # Label pour ML
                 })
+
+                compteur+=1
 
     # Convertir les données en DataFrame pour les exploiter dans un modèle ML
     ml_df = pd.DataFrame(ml_data)
@@ -58,7 +68,7 @@ else:
     # Afficher un aperçu des données
     print(ml_df.head())
 
-    ml_df.to_csv('ml_data.csv', index=False)
+    ml_df.to_csv('ml_credit.csv', index=False)
 
 
 # Fermer la connexion

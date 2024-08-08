@@ -4,12 +4,13 @@ from datetime import datetime
 
 # Connexion à MongoDB
 client = pymongo.MongoClient("mongodb+srv://intraday:intraday@dev.vqjrrab.mongodb.net/")  # Remplacez par votre URI MongoDB
-db = client['DEV']  
-collection = db['MOUV_COPIE']  
-dct_collection = db['DCT']  # Collection pour traquer les opérations débit/crédit
+MOUV = client['DEV']
+DCT = client['DCT']  
+mouv_collection = MOUV['MOUV']  
+dct_collection = DCT['DCT']  # Collection pour traquer les opérations débit/crédit
 
 # Récupérer uniquement les documents non suivis (tracked: false ou tracked: null)
-documents = list(collection.find({'$or': [{'tracked': False}, {'tracked': {'$exists': False}}, {'tracked': None}]}))
+documents = list(mouv_collection.find({'$or': [{'TRACKED': False}, {'TRACKED': {'$exists': "false"}}, {'TRACKED': None}]}))
 
 # Vérifiez si des documents sont récupérés
 if not documents:
@@ -42,7 +43,8 @@ else:
                     'SIGN': 'D',
                     'DISPONIBLE': amount,
                     'OLDDISPONIBLE': old_amount,
-                    'AMOUNT': row['AMAOUNT']
+                    'AMOUNT': row['AMAOUNT'],
+                    'CANAL': row['CANAL']
                 }
             # Vérifier si le solde précédent était négatif et le nouveau solde est ≥ 0 (transition à C)
             elif old_amount < 0 and amount >= 0:
@@ -53,7 +55,9 @@ else:
                     'SIGN': 'C',
                     'DISPONIBLE': amount,
                     'OLDDISPONIBLE': old_amount,
-                    'AMOUNT': row['AMAOUNT']
+                    'AMOUNT': row['AMAOUNT'],
+                    'CANAL': row['CANAL']
+
                 }
 
     # Insérer ou mettre à jour les dernières opérations transitoires dans la collection DCT
@@ -67,7 +71,7 @@ else:
     print(f"Opérations transitoires insérées ou mises à jour dans la collection DCT: {len(last_transitional_operations)}")
 
     # Mettre à jour l'attribut tracked à true pour les documents traités
-    collection.update_many({'_id': {'$in': df['_id'].tolist()}}, {'$set': {'tracked': True}})
+    mouv_collection.update_many({'_id': {'$in': df['_id'].tolist()}}, {'$set': {'TRACKED': "true"}})
 
 # Fermer la connexion
 client.close()

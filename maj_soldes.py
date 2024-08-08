@@ -5,7 +5,7 @@ import pandas as pd
 # Connexion à MongoDB
 client = pymongo.MongoClient("mongodb+srv://intraday:intraday@dev.vqjrrab.mongodb.net/")  # Remplacez par votre URI MongoDB
 db = client['DEV']  
-collection = db['TEST'] 
+collection = db['MOUV'] 
 
 # Récupération des documents
 documents = list(collection.find({}))
