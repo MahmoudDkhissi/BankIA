@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions Bancaires</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='cih_logo.png') }}" alt="CIH Bank Logo">
+        </div>
+        <h1>Transactions pour le compte : {{ account_number }}</h1>
+        {% if transactions %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>STEP</th>
+                        <th>Montant</th>
+                        <th>CANAL</th>
+                        <th>REF</th>
+                        <th>SOLDE</th>
+
+                        <!-- Ajoutez d'autres colonnes si nécessaire -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.STEP }}</td>
+                            <td>{{ transaction.AMOUNT }}</td>
+                            <td>{{ transaction.CANAL }}</td>
+                            <td>{{ transaction.OPERATION_REF }}</td>
+                            <td>{{ transaction.DISPONIBLE }}</td>
+                            <!-- Ajoutez d'autres colonnes si nécessaire -->
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Aucune transaction trouvée pour ce compte.</p>
+        {% endif %}
+        <a href="/">Retour</a>
+    </div>
+</body>
+</html>

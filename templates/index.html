@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche de Transactions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='cih_logo.png') }}" alt="CIH Bank Logo">
+        </div>
+        <h1>Recherche de transactions critiques</h1>
+        <form action="/transactions" method="get">
+            <label for="account_number">Numéro de Compte :</label>
+            <input type="text" id="account_number" name="account_number" required>
+            <button type="submit">Rechercher</button>
+        </form>
+    </div>
+</body>
+</html>
