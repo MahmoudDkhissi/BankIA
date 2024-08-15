@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détection de Fraude Bancaire</title>
+</head>
+<body>
+    <h1>Détection de Fraude Bancaire</h1>
+    <form action="/" method="post">
+        <label for="DISPONIBLE">DISPONIBLE:</label>
+        <input type="number" step="0.01" id="DISPONIBLE" name="DISPONIBLE" required><br><br>
+
+        <label for="OLDDISPONIBLE">OLDDISPONIBLE:</label>
+        <input type="number" step="0.01" id="OLDDISPONIBLE" name="OLDDISPONIBLE" required><br><br>
+
+        <label for="ACCOUNT">ACCOUNT:</label>
+        <input type="number" id="ACCOUNT" name="ACCOUNT" required><br><br>
+
+        <label for="AMAOUNT">AMAOUNT:</label>
+        <input type="number" step="0.01" id="AMAOUNT" name="AMAOUNT" required><br><br>
+
+        <label for="CANAL">CANAL:</label>
+        <select id="CANAL" name="CANAL" required>
+            <option value="1">1</option>
+            <option value="SYHBK">SYHBK</option>
+            <option value="SYMON">SYMON</option>
+        </select><br><br>
+
+        <label for="TYPE">TYPE:</label>
+        <select id="TYPE" name="TYPE" required>
+            <option value="C">C</option>
+            <option value="D">D</option>
+        </select><br><br>
+
+        <button type="submit">Vérifier la Fraude</button>
+    </form>
+    <h2>Résultat: {{ prediction }}</h2>
+</body>
+</html>
